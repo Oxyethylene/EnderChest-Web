@@ -13,12 +13,15 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "bytes": "^3.1.2",
+    "element-plus": "^2.3.3",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
+    "@types/bytes": "^3.1.1",
     "@types/jsdom": "^21.1.0",
     "@types/node": "^18.14.2",
     "@vitejs/plugin-vue": "^4.0.0",
