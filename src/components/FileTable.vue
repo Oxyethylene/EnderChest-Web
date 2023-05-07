@@ -1,11 +1,14 @@
 <template>
-  <el-button :icon='RefreshRight'>
+  <el-button :icon='RefreshRight' @click='updateTableData' :loading='isFetching'>
     刷新
   </el-button>
-  <el-table :data='tableData' stripe style='width: 100%'>
-    <el-table-column prop='name' label='Name' />
-    <el-table-column label='Size' width='180' :formatter='sizeFormatter' prop='size' />
-    <el-table-column label='Date' width='180' :formatter='dateFormatter' prop='mod_time' />
+  <el-table :data='tableData'
+            stripe
+            style='width: 100%'
+            :default-sort="{prop:'name', order: 'descending'}">
+    <el-table-column prop='name' label='Name' sortable />
+    <el-table-column label='Size' sortable width='180' :formatter='sizeFormatter' prop='size' />
+    <el-table-column label='Date' sortable width='180' :formatter='dateFormatter' prop='mod_time' />
     <el-table-column width='280'>
       <template #default='scope'>
         <el-button
@@ -33,6 +36,7 @@ import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
 import { RefreshRight } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 interface File {
   name: string
@@ -41,16 +45,21 @@ interface File {
 }
 
 const tableData: Ref<File[]> = ref<File[]>([])
+const isFetching = ref<boolean>(false)
 
 const updateTableData = () => {
-  axios.get('http://127.0.0.1:8080/files')
+  isFetching.value = true
+
+  axios.get('http://120.24.82.106/littlebox/files')
     .then(resp => {
-      console.log(resp)
       tableData.value = resp.data.data
     })
     .catch((reason) => {
-      console.error(reason)
+      ElMessage.error(reason)
       tableData.value = []
+    })
+    .finally(() => {
+      isFetching.value = false
     })
 }
 

@@ -11,7 +11,11 @@
     <template #trigger>
       <el-button type='primary'>select file</el-button>
     </template>
-    <el-button class='ml-3' type='success' @click='submitUpload' :icon='UploadFilled'>
+    <el-button class='ml-3'
+               type='success'
+               @click='submitUpload'
+               :icon='UploadFilled'
+               :loading='isUploading'>
       upload to server
     </el-button>
     <template #tip>
@@ -30,6 +34,7 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import axios from 'axios'
 
 const upload = ref<UploadInstance>()
+const isUploading = ref<boolean>(false)
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
   upload.value!.clearFiles()
@@ -44,6 +49,7 @@ const doUpload = (options: UploadRequestOptions) => {
   const formData = new FormData()
   formData.set('object', file)
 
+  isUploading.value = true
   axios({
     baseURL: 'http://127.0.0.1:8080/',
     url:'/file',
@@ -55,6 +61,8 @@ const doUpload = (options: UploadRequestOptions) => {
       objectName: filename,
     },
     data: formData,
+  }).finally(() => {
+    isUploading.value = false
   })
 }
 
