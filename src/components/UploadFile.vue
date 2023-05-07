@@ -11,7 +11,7 @@
     <template #trigger>
       <el-button type='primary'>select file</el-button>
     </template>
-    <el-button class='ml-3' type='success' @click='submitUpload'>
+    <el-button class='ml-3' type='success' @click='submitUpload' :icon='UploadFilled'>
       upload to server
     </el-button>
     <template #tip>
@@ -25,8 +25,8 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 import { genFileId } from 'element-plus'
-import type { UploadRequestOptions } from 'element-plus'
-import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import type { UploadInstance, UploadProps, UploadRawFile, UploadRequestOptions } from 'element-plus'
+import { UploadFilled } from '@element-plus/icons-vue'
 import axios from 'axios'
 
 const upload = ref<UploadInstance>()
@@ -46,8 +46,8 @@ const doUpload = (options: UploadRequestOptions) => {
 
   axios({
     baseURL: 'http://127.0.0.1:8080/',
-    url: '/file',
-    method: 'post',
+    url:'/file',
+    method:'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },

@@ -1,4 +1,7 @@
 <template>
+  <el-button :icon='RefreshRight'>
+    刷新
+  </el-button>
   <el-table :data='tableData' stripe style='width: 100%'>
     <el-table-column prop='name' label='Name' />
     <el-table-column label='Size' width='180' :formatter='sizeFormatter' prop='size' />
@@ -29,6 +32,7 @@ import bytes from 'bytes'
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
+import { RefreshRight } from '@element-plus/icons-vue'
 
 interface File {
   name: string
