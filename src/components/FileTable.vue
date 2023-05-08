@@ -27,7 +27,8 @@
 <script lang='ts' setup>
 import bytes from 'bytes'
 import axios from 'axios'
-import { onMounted, ref, Ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import type { Ref } from 'vue'
 
 interface File {
   name: string

@@ -24,7 +24,8 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import { genFileId, UploadRequestOptions } from 'element-plus'
+import { genFileId } from 'element-plus'
+import type { UploadRequestOptions } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 import axios from 'axios'
 
@@ -45,8 +46,8 @@ const doUpload = (options: UploadRequestOptions) => {
 
   axios({
     baseURL: 'http://127.0.0.1:8080/',
-    url:'/file',
-    method:'post',
+    url: '/file',
+    method: 'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
