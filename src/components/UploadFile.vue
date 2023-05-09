@@ -28,7 +28,7 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue'
-import { genFileId } from 'element-plus'
+import { ElMessage, genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile, UploadRequestOptions } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import axios from 'axios'
@@ -51,9 +51,9 @@ const doUpload = (options: UploadRequestOptions) => {
 
   isUploading.value = true
   axios({
-    baseURL: 'http://127.0.0.1:8080/',
-    url:'/file',
-    method:'post',
+    baseURL: 'http://120.24.82.106/littlebox',
+    url: '/file',
+    method: 'post',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -61,9 +61,13 @@ const doUpload = (options: UploadRequestOptions) => {
       objectName: filename,
     },
     data: formData,
-  }).finally(() => {
-    isUploading.value = false
   })
+    .catch((reason) => {
+      ElMessage.error(reason)
+    })
+    .finally(() => {
+      isUploading.value = false
+    })
 }
 
 const submitUpload = () => {
