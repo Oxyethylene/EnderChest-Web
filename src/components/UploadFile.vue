@@ -24,6 +24,7 @@
       </div>
     </template>
   </el-upload>
+  <el-progress :text-inside='true' :stroke-width='26' :percentage='progress' />
 </template>
 
 <script setup lang='ts'>
@@ -31,43 +32,32 @@ import { ref } from 'vue'
 import { ElMessage, genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile, UploadRequestOptions } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
-import axios from 'axios'
+import { uploadFile } from '@/service/FileSerivce'
 
 const upload = ref<UploadInstance>()
 const isUploading = ref<boolean>(false)
+const progress = ref<number>(0)
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile
   file.uid = genFileId()
   upload.value!.handleStart(file)
+  progress.value = 0
 }
 
 const doUpload = (options: UploadRequestOptions) => {
   const { file } = options
-  const filename = file.name
-  const formData = new FormData()
-  formData.set('object', file)
-
   isUploading.value = true
-  axios({
-    baseURL: 'http://120.24.82.106/littlebox',
-    url: '/file',
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    params: {
-      objectName: filename,
-    },
-    data: formData,
-  })
+  progress.value = 0
+  uploadFile(file)
     .catch((reason) => {
       ElMessage.error(reason)
     })
     .finally(() => {
       isUploading.value = false
     })
+  progress.value = 100
 }
 
 const submitUpload = () => {
@@ -76,5 +66,11 @@ const submitUpload = () => {
 </script>
 
 <style scoped>
+el-upload {
+  width: 300px;
+}
 
+el-progress {
+  width: 200px;
+}
 </style>
