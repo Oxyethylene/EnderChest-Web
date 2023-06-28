@@ -32,7 +32,7 @@
 
 <script lang='ts' setup>
 import bytes from 'bytes'
-import axios from 'axios'
+import { getFileList } from '@/service/FileSerivce'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
 import { RefreshRight } from '@element-plus/icons-vue'
@@ -50,7 +50,7 @@ const isFetching = ref<boolean>(false)
 const updateTableData = () => {
   isFetching.value = true
 
-  axios.get('http://120.24.82.106/littlebox/files')
+  getFileList()
     .then(resp => {
       tableData.value = resp.data.data
     })
