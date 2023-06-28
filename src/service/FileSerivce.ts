@@ -1,4 +1,5 @@
 import { Service } from '@/service/Service'
+import { useAccountStore } from '@/stores/account'
 
 export function getFileList() {
   return Service({
@@ -11,6 +12,7 @@ export function getFileList() {
 }
 
 export function uploadFile(file: File) {
+  const account = useAccountStore()
   const filename = file.name
   const formData = new FormData()
   formData.set('object', file)
@@ -22,8 +24,8 @@ export function uploadFile(file: File) {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     auth: {
-      username: 'kudlife',
-      password: 'kudlife',
+      username: account.username,
+      password: account.password,
     },
     params: {
       objectName: filename,
@@ -32,10 +34,10 @@ export function uploadFile(file: File) {
   })
 }
 
-export function downloadFile(){
+export function downloadFile() {
 
 }
 
-export function deleteFile(){
+export function deleteFile() {
 
 }
