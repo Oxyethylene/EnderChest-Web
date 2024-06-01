@@ -1,43 +1,49 @@
 import { Service } from '@/service/Service'
-import { useAccountStore } from '@/stores/account'
 
 export function getFileList() {
   return Service({
-    url: '/files',
+    url: '/api/object',
     method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-    },
   })
 }
 
-export function uploadFile(file: File) {
-  const account = useAccountStore()
+export function uploadFile(file: File, onProgress?: (event: any) => void) {
   const filename = file.name
   const formData = new FormData()
   formData.set('object', file)
 
   return Service({
-    url: '/file',
+    url: '/api/object',
     method: 'post',
+    timeout: 3000000,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    auth: {
-      username: account.username,
-      password: account.password,
     },
     params: {
       objectName: filename,
     },
     data: formData,
+    onUploadProgress: onProgress == null ? event => {
+    } : onProgress,
   })
 }
 
-export function downloadFile() {
-
+export function downloadFile(id: string) {
+  return Service({
+    url: '/api/object',
+    method: 'get',
+    params: {
+      id: id,
+    },
+  })
 }
 
-export function deleteFile() {
-
+export function deleteFile(id: string) {
+  return Service({
+    url: '/api/object',
+    method: 'delete',
+    params: {
+      id: id,
+    },
+  })
 }

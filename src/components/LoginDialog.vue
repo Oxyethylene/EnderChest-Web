@@ -13,13 +13,12 @@ const doLogin = () => {
     .then(response => {
       token.setToken(response.data.data.token)
     })
+    .finally()
 }
 </script>
 
 <template>
-  <el-input v-model='email' placeholder='email' label='账号' />
-  <el-input v-model='password' placeholder='password' type='password' label='邮箱' show-password />
-  <el-button @click='doLogin'>登陆</el-button>
+
 </template>
 
 <style scoped>

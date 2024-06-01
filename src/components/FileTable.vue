@@ -4,7 +4,6 @@
   </el-button>
   <el-table :data='tableData'
             stripe
-            style='width: 100%'
             :default-sort="{prop:'name', order: 'descending'}">
     <el-table-column prop='name' label='Name' sortable />
     <el-table-column label='Size' sortable width='180' :formatter='sizeFormatter' prop='size' />
@@ -32,11 +31,11 @@
 
 <script lang='ts' setup>
 import bytes from 'bytes'
-import { getFileList } from '@/service/FileSerivce'
+import { deleteFile, getFileList } from '@/service/FileSerivce'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
 import { RefreshRight } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, type TableColumnCtx } from 'element-plus'
 
 interface File {
   name: string
@@ -51,13 +50,17 @@ const updateTableData = () => {
   isFetching.value = true
 
   getFileList()
-    .then(resp => {
-      tableData.value = resp.data.data
-    })
-    .catch((reason) => {
-      ElMessage.error(reason)
-      tableData.value = []
-    })
+    .then(
+      resp => {
+        tableData.value = resp.data.data
+      },
+      reason => {
+        if (reason != null) {
+          ElMessage.error(reason)
+        }
+        tableData.value = []
+      },
+    )
     .finally(() => {
       isFetching.value = false
     })
@@ -69,13 +72,25 @@ const handleDownload = (index: number, row: File) => {
 
 const handleDelete = (index: number, row: File) => {
   console.log(`deleting file ${row.name} at index ${index}`)
+  deleteFile(row.name)
+    .then(
+      response => {
+        if (response.data.code == 200) {
+          ElMessage.success('删除成功')
+          updateTableData()
+        }
+      },
+      reason => {
+        ElMessage.error(reason)
+      },
+    )
 }
 
-const sizeFormatter = (row: number, column: number, cellValue: number, index: number) => {
+const sizeFormatter = (row: any, column: TableColumnCtx<any>, cellValue: any, index: number) => {
   return bytes.format(cellValue)
 }
 
-const dateFormatter = (row: number, column: number, cellValue: number, index: number) => {
+const dateFormatter = (row: any, column: TableColumnCtx<any>, cellValue: any, index: number) => {
   return new Date(cellValue * 1000).toLocaleString()
 }
 
@@ -85,5 +100,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
+el-table {
+}
 </style>
